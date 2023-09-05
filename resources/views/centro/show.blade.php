@@ -38,6 +38,8 @@
         <tbody class="table-group-divider">
             @foreach ($centro->lancamentos()->get() as $lancamento)
             <tr>
+
+
                 <td scope="row">{{ $loop->iteration }}</td>
                 <td scope="row">{{ $lancamento->id_lancamento }}</td>
                 <td>{!! $lancamento->tipo->tipo !!}</td>
