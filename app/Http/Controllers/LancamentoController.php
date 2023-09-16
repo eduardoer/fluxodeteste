@@ -22,10 +22,28 @@ class LancamentoController extends Controller
     /**
      * Listar todos os lançamentos
      * @date 04-09-2023
+     * @update 15-09-2023 - inclusão da pesquisa
+     *
      */
-    public function index()
+    public function index(Request $request)
     {
-        $lancamentos = Lancamento::orderBy('id_lancamento','desc')
+        $search = $request->get('search');
+        $dt_inicial = $request->get('dt_inicial')??null;
+        $dt_final = $request->get('dt_final')??null;
+
+        //where('id_user',Auth::user()->id)
+        $lancamentos = Lancamento::where(function ($query) use ($search,$dt_inicial,
+        $dt_final){
+          if($search){
+               $query->where('descricao','like',"%$search%");
+          }
+          if($dt_inicial){
+            $query->where('vencimento','>=',$dt_inicial);
+            }
+            if($dt_inicial){
+                $query->where('vencimento','<=',$dt_final);
+            }
+      })->orderBy('id_lancamento','desc')
         ->paginate(10);
 
         return view('lancamento.index')
